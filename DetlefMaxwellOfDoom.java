@@ -25,13 +25,13 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		setAdjustRadarForRobotTurn(true);
 		
 		round = 0;
-		turnRadarRight(360);
 		// Robot main loop
 		while(true)
 		{
 			round++;
 			out.println("Round: " + round);
-				
+			
+			turnRadarRight(360);
 			execute();
 		}
 	}
@@ -99,8 +99,9 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 	{
 		double bearing = e.getBearing();
 		fireControl(bearing, 15);
-		back(59);
-		turnRadarRight(360);
+		back(10 * moveDirection);
+		setTurnRadarRight(360);
+		setAhead(100 * moveDirection);
 	}
 	
 	public void onWin(WinEvent e) {
