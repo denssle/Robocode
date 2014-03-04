@@ -8,7 +8,7 @@ import java.awt.Color;
 
 public class DetlefMaxwellOfDoom extends Robot
 {
-	double target;
+	double target; //zur zielverfolgung
 	int round;
 	
 	public void run() 
@@ -38,30 +38,36 @@ public class DetlefMaxwellOfDoom extends Robot
 		double distance = e.getDistance();
 		if(distance < 350)
 		{
-			shoot(bearing, distance);
+			fireControl(bearing, distance);
 		}
 	}
 	
 	
-	public void shoot(double bearing, double distance)
+	public void fireControl(double bearing, double distance)
 	{
 		double heading = getHeading();
-		double gunheading = getGunHeading() * -1;
+		double gunheading = getGunHeading();
+		double x = heading + bearing + gunheading * -1;
 		
-		double x = heading + bearing + gunheading;
-		
-		if(getGunHeat() == 0)
+		if(getGunHeat() == 0 && gunheading < 0)
 		{
-			turnGunRight(x);
-			out.println("Enemy under fire!");
-			if(distance < 99)
-			{
-				fire(2);
-			}
-			else
-			{
-				fire(1);
-			}
+			turnGunLeft(x);
+		}
+		else
+		{
+			turnGunRight(x);	
+		}
+		openFire(distance);
+	}
+	public void openFire(double distance){
+		out.println("Enemy under fire!");
+		if(distance < 99)
+		{
+			fire(2);
+		}
+		else
+		{
+			fire(1);
 		}
 	}
 	
@@ -88,6 +94,6 @@ public class DetlefMaxwellOfDoom extends Robot
 	public void onHitRobot(HitRobotEvent e)
 	{
 		double bearing = e.getBearing();
-		shoot(bearing, 15);
+		fireControl(bearing, 15);
 	}
 }
