@@ -6,11 +6,13 @@ import java.awt.Color;
  * DetlefMaxwellOfDoom - a robot by Dominik
  */
 
-public class DetlefMaxwellOfDoom extends Robot
+public class DetlefMaxwellOfDoom extends AdvancedRobot
 {
 	double target; //zur zielverfolgung
 	int round;
-	
+	byte moveDirection = 1;
+	byte scanDirection = 1;
+		
 	public void run() 
 	{
 		setBodyColor(Color.green);
@@ -19,16 +21,18 @@ public class DetlefMaxwellOfDoom extends Robot
 		setBulletColor(Color.yellow);
 		setScanColor(Color.red);
 		
-		target = 360;
+		setAdjustRadarForGunTurn(true);
+		setAdjustRadarForRobotTurn(true);
+		
 		round = 0;
+		turnRadarRight(360);
 		// Robot main loop
 		while(true)
 		{
 			round++;
 			out.println("Round: " + round);
-			
-			ahead(111);
-			turnRadarRight(target);
+				
+			execute();
 		}
 	}
 
@@ -36,12 +40,25 @@ public class DetlefMaxwellOfDoom extends Robot
 	{
 		double bearing = e.getBearing();
 		double distance = e.getDistance();
-		if(distance < 350)
+		double heading = e.getHeading();		
+		
+		radarControl();
+		
+		if(distance < 320)
 		{
 			fireControl(bearing, distance);
 		}
+		//out.println(heading);
+		//out.println(bearing);
+		setTurnRight(bearing);
+		setAhead(400 * moveDirection);
 	}
 	
+	public void radarControl()
+	{
+		scanDirection *= -1;
+		setTurnRadarRight(360 * scanDirection);
+	}
 	
 	public void fireControl(double bearing, double distance)
 	{
@@ -49,51 +66,44 @@ public class DetlefMaxwellOfDoom extends Robot
 		double gunheading = getGunHeading();
 		double x = heading + bearing + gunheading * -1;
 		
-		if(getGunHeat() == 0 && gunheading < 0)
+		if(getGunHeat() == 0 && getEnergy() > 5)
 		{
-			turnGunLeft(x);
+			turnGunRight(x);
+			openFire(distance);
 		}
-		else
-		{
-			turnGunRight(x);	
-		}
-		openFire(distance);
 	}
+	
 	public void openFire(double distance){
 		out.println("Enemy under fire!");
 		if(distance < 99)
 		{
-			fire(2);
+			fire(2.3);
 		}
 		else
 		{
-			fire(1);
+			fire(1.3);
 		}
 	}
 	
 	public void onHitByBullet(HitByBulletEvent e)
 	{
 		out.println("We are under fire!");
-		ahead(50);
 	}
 	
 	public void onHitWall(HitWallEvent e) 
 	{
-		double bearing = e.getBearing();
-		if(bearing > 0)
-		{
-			turnRight(bearing);
-		}
-		else
-		{
-			turnRight(45);
-		}
-		ahead(75);
+		moveDirection *= -1;
 	}	
 	
 	public void onHitRobot(HitRobotEvent e)
 	{
 		double bearing = e.getBearing();
 		fireControl(bearing, 15);
+		back(59);
+		turnRadarRight(360);
+	}
+	
+	public void onWin(WinEvent e) {
+		turnRadarRight(36000);
 	}
 }
