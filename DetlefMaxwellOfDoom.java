@@ -5,6 +5,7 @@ import java.awt.Color;
 /**
  * DetlefMaxwellOfDoom - a robot by Dominik
  */
+
 public class DetlefMaxwellOfDoom extends Robot
 {
 	double target;
@@ -44,7 +45,6 @@ public class DetlefMaxwellOfDoom extends Robot
 	
 	public void shoot(double bearing, double distance)
 	{
-		out.println("Enemy under fire!");
 		double heading = getHeading();
 		double gunheading = getGunHeading() * -1;
 		
@@ -52,7 +52,8 @@ public class DetlefMaxwellOfDoom extends Robot
 		
 		if(getGunHeat() == 0)
 		{
-			turnGunRight(x); 
+			turnGunRight(x);
+			out.println("Enemy under fire!");
 			if(distance < 99)
 			{
 				fire(2);
@@ -66,6 +67,7 @@ public class DetlefMaxwellOfDoom extends Robot
 	
 	public void onHitByBullet(HitByBulletEvent e)
 	{
+		out.println("We are under fire!");
 		ahead(50);
 	}
 	
@@ -85,7 +87,6 @@ public class DetlefMaxwellOfDoom extends Robot
 	
 	public void onHitRobot(HitRobotEvent e)
 	{
-		back(15);
 		double bearing = e.getBearing();
 		shoot(bearing, 15);
 	}
