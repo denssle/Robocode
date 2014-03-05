@@ -73,7 +73,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 	}
 	
 	public void openFire(double distance){
-		message("Enemy under fire!");
+		//message("Enemy under fire!");
 		short max = 250;
 		byte min = 20;
 		if(distance > max)
@@ -110,7 +110,15 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		setTurnRadarRight(360);
 		fireControl(bearing, 15);
 	}
-	
+	public void onWin(WinEvent e)
+	{
+		for (int i = 0; i < 50; i++)
+		{
+			setTurnRadarLeft(3600);
+			changeColor();
+			execute();
+		}
+	}
 	public void fuckYou(String name)
 	{
 		String[] fuckyou = {"Fuck you ", 

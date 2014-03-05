@@ -48,6 +48,7 @@ public class DMoD extends AdvancedRobot
 		{
 			fireControl(bearing, distance);
 		}
+		ahead(52);
 	}
 	public void radarControl()
 	{
