@@ -28,9 +28,6 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		// Robot main loop
 		while(true)
 		{
-			round++;
-			out.println("Round: " + round);
-			
 			turnRadarRight(360);
 			execute();
 		}
@@ -74,7 +71,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 	}
 	
 	public void openFire(double distance){
-		out.println("Enemy under fire!");
+		message("Enemy under fire!");
 		short max = 250;
 		byte min = 20;
 		if(distance > max)
@@ -93,9 +90,9 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 	
 	public void onHitByBullet(HitByBulletEvent e)
 	{
-		out.println("We are under fire!");
+		fuckYou(e.getName());
 		double bearing = e.getBearing();
-		fireControl(bearing, 15);
+		fireControl(bearing, 251);
 	}
 	
 	public void onHitWall(HitWallEvent e) 
@@ -112,7 +109,24 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		fireControl(bearing, 15);
 	}
 	
-	public void onWin(WinEvent e) {
-		turnRadarRight(36000);
+	public void fuckYou(String name)
+	{
+		String[] fuckyou = {"Fuck you ", 
+							"I hate you ", 
+							"You´r a piece of Shit, ",
+							"You are worthless ",
+							"Candy Ass ",
+							"Hit the road, ",
+							"Eat my shorts, ",
+							"You've got the brains of a doughnut, ",
+							"You´r a randy old bugger, "
+							 };
+		int rand = (int) (Math.random() * fuckyou.length);
+		message(fuckyou[rand]+name+"!!!");
+	}
+	
+	public void message(String content)
+	{
+		out.println(getName()+": "+content);
 	}
 }
