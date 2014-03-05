@@ -77,21 +77,23 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		out.println("Enemy under fire!");
 		if(distance > 250)
 		{
-			fire(1.3);
+			fire(1.5);
 		}
 		if((distance >= 20) && (distance <= 250))
 		{
-			fire(1.3);
+			fire(2.5);
 		}
 		if(distance < 20)
 		{
-			fire(4);
+			fire(Rules.MAX_BULLET_POWER);
 		}
 	}
 	
 	public void onHitByBullet(HitByBulletEvent e)
 	{
 		out.println("We are under fire!");
+		double bearing = e.getBearing();
+		fireControl(bearing, 15);
 	}
 	
 	public void onHitWall(HitWallEvent e) 
@@ -105,7 +107,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		fireControl(bearing, 15);
 		back(10 * moveDirection);
 		setTurnRadarRight(360);
-		setAhead(100 * moveDirection);
+		fireControl(bearing, 15);
 	}
 	
 	public void onWin(WinEvent e) {
