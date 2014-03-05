@@ -75,15 +75,17 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 	
 	public void openFire(double distance){
 		out.println("Enemy under fire!");
-		if(distance > 250)
+		short max = 250;
+		byte min = 20;
+		if(distance > max)
 		{
 			fire(1.5);
 		}
-		if((distance >= 20) && (distance <= 250))
+		if((distance >= min) && (distance <= max))
 		{
 			fire(2.5);
 		}
-		if(distance < 20)
+		if(distance < min)
 		{
 			fire(Rules.MAX_BULLET_POWER);
 		}
