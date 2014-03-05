@@ -15,12 +15,12 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		
 	public void run() 
 	{
-		setBodyColor(Color.green);
+		/**setBodyColor(Color.green);
 		setGunColor(Color.black);
 		setRadarColor(Color.green);
 		setBulletColor(Color.yellow);
 		setScanColor(Color.red);
-		
+		*/
 		setAdjustRadarForGunTurn(true);
 		setAdjustRadarForRobotTurn(true);
 		
