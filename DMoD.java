@@ -8,7 +8,6 @@ import java.awt.Color;
 
 public class DMoD extends AdvancedRobot
 {
-	double target;
 	int round;
 	byte scanDirection = 2;
 	
@@ -20,16 +19,15 @@ public class DMoD extends AdvancedRobot
 		setBulletColor(Color.yellow);
 		setScanColor(Color.red);
 
-		target = 360;
 		round = 0;
 		// Robot main loop
+		turnRadarLeft(360);
 		while(true)
 		{
 			round++;
 			out.println("Round: " + round);
-
+			radarControl();
 			ahead(111);
-			turnRadarRight(target);
 			execute();
 		}
 	}

@@ -48,7 +48,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 			fireControl(bearing, distance);
 		}
 
-		setTurnRight(bearing + 120);
+		setTurnRight(bearing + 110);
 		setAhead(4500* moveDirection);
 	}
 	

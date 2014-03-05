@@ -3,7 +3,7 @@ import robocode.*;
 import java.awt.Color;
 
 /**
- * Randoom - a robot by (your name here)
+ * Randoom - a robot by Dominik
  */
 public class Randoom extends AdvancedRobot
 {
@@ -29,15 +29,11 @@ public class Randoom extends AdvancedRobot
 		double bearing = e.getBearing();
 		double distance = e.getDistance();
 		double heading = e.getHeading();		
-		
-		if(distance < 600)
-		{
-			fireControl(bearing, distance);
-		}
+		fireControl(bearing);
 	}
 	
 	
-	public void fireControl(double bearing, double distance)
+	public void fireControl(double bearing)
 	{
 		double heading = getHeading();
 		double gunheading = getGunHeading();
@@ -51,7 +47,8 @@ public class Randoom extends AdvancedRobot
 	}
 
 	public void onHitByBullet(HitByBulletEvent e) {
-		
+		double bearing = e.getBearing();
+		fireControl(bearing);
 	}
 	
 	public void onHitWall(HitWallEvent e) {
