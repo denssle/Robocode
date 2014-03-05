@@ -11,7 +11,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 	double target; //zur zielverfolgung
 	int round;
 	byte moveDirection = 1;
-	byte scanDirection = 1;
+	byte scanDirection = 2;
 		
 	public void run() 
 	{
@@ -75,13 +75,17 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 	
 	public void openFire(double distance){
 		out.println("Enemy under fire!");
-		if(distance < 99)
-		{
-			fire(2.3);
-		}
-		else
+		if(distance > 250)
 		{
 			fire(1.3);
+		}
+		if((distance >= 20) && (distance <= 250))
+		{
+			fire(1.3);
+		}
+		if(distance < 20)
+		{
+			fire(4);
 		}
 	}
 	
