@@ -35,6 +35,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 
 	public void onScannedRobot(ScannedRobotEvent e)
 	{
+		changeColor();
 		double bearing = e.getBearing();
 		double distance = e.getDistance();
 		double heading = e.getHeading();		
@@ -128,5 +129,16 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 	public void message(String content)
 	{
 		out.println(getName()+": "+content);
+	}
+	public void changeColor()
+	{
+		Color[] colours = {Color.green, Color.black, Color.blue, Color.cyan, 
+							Color.darkGray, Color.gray, Color.magenta,
+							 Color.orange, Color.pink, Color.red, Color.white, Color.yellow}; 
+		setColors(colours[(int) (Math.random() * colours.length)],
+                  colours[(int) (Math.random() * colours.length)],
+                  colours[(int) (Math.random() * colours.length)],
+                  colours[(int) (Math.random() * colours.length)],
+                  colours[(int) (Math.random() * colours.length)]);
 	}
 }

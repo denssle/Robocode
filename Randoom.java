@@ -1,28 +1,19 @@
 package DE;
 import robocode.*;
 import java.awt.Color;
-import robocode.util.*
+
 /**
  * Randoom - a robot by (your name here)
  */
-public class Randoom extends Robot
+public class Randoom extends AdvancedRobot
 {
-	double bulletPower = Math.min(3.0,getEnergy());
-	double myX = getX();
-	double myY = getY();
-	double absoluteBearing = getHeadingRadians() + e.getBearingRadians();
-	double enemyX = getX() + e.getDistance() * Math.sin(absoluteBearing);
-	double enemyY = getY() + e.getDistance() * Math.cos(absoluteBearing);
-	double enemyHeading = e.getHeadingRadians();
-	double enemyHeadingChange = enemyHeading - oldEnemyHeading;
-	double enemyVelocity = e.getVelocity();
-	oldEnemyHeading = enemyHeading;
+	byte moveDir = 1;
 	
-			
 	public void run() {
-		turnGunRight(-90);
 		while(true) {
-			fire(1);
+			setAhead(400 * moveDir);
+			changeColor();
+			execute();
 		}
 	}
 
@@ -30,10 +21,21 @@ public class Randoom extends Robot
 	}
 
 	public void onHitByBullet(HitByBulletEvent e) {
-		back(10);
+		
 	}
 	
 	public void onHitWall(HitWallEvent e) {
-		back(20);
+		moveDir *= -1;
 	}	
+	public void changeColor()
+	{
+		Color[] colours = {Color.green, Color.black, Color.blue, Color.cyan, 
+							Color.darkGray, Color.gray, Color.magenta,
+							 Color.orange, Color.pink, Color.red, Color.white, Color.yellow}; 
+		setColors(colours[(int) (Math.random() * colours.length)],
+                  colours[(int) (Math.random() * colours.length)],
+                  colours[(int) (Math.random() * colours.length)],
+                  colours[(int) (Math.random() * colours.length)],
+                  colours[(int) (Math.random() * colours.length)]);
+	}
 }
