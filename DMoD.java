@@ -46,7 +46,7 @@ public class DMoD extends AdvancedRobot
 		}
 		if(distance < 450)
 		{
-			shoot(bearing, distance);
+			fireControl(bearing, distance);
 		}
 	}
 	public void radarControl()
@@ -55,25 +55,34 @@ public class DMoD extends AdvancedRobot
 		setTurnRadarRight(360 * scanDirection);
 	}
 
-	public void shoot(double bearing, double distance)
+	public void fireControl(double bearing, double distance)
 	{
 		double heading = getHeading();
-		double gunheading = getGunHeading() * -1;
-
-		double x = heading + bearing + gunheading;
+		double gunheading = getGunHeading();
+		double x = heading + bearing + gunheading * -1;
 		
-		if(getGunHeat() == 0)
+		if(getGunHeat() == 0 && getEnergy() > 5)
 		{
 			turnGunRight(x);
-			out.println("Enemy under fire!");
-			if(distance < 99)
-			{
-				fire(2);
-			}
-			else
-			{
-				fire(1);
-			}
+			openFire(distance);
+		}
+	}
+	
+	public void openFire(double distance){
+		out.println("Enemy under fire!");
+		short max = 250;
+		byte min = 20;
+		if(distance > max)
+		{
+			fire(1.5);
+		}
+		if((distance >= min) && (distance <= max))
+		{
+			fire(2.5);
+		}
+		if(distance < min)
+		{
+			fire(Rules.MAX_BULLET_POWER);
 		}
 	}
 	
@@ -104,6 +113,6 @@ public class DMoD extends AdvancedRobot
 	public void onHitRobot(HitRobotEvent e)
 	{
 		double bearing = e.getBearing();
-		shoot(bearing, 15);
+		fireControl(bearing, 15);
 	}
 }
