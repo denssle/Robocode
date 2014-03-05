@@ -6,11 +6,12 @@ import java.awt.Color;
  * DetlefMaxwellOfDoom - a robot by Dominik
  */
 
-public class DMoD extends Robot
+public class DMoD extends AdvancedRobot
 {
 	double target;
 	int round;
-
+	byte scanDirection = 2;
+	
 	public void run() 
 	{
 		setBodyColor(Color.green);
@@ -29,6 +30,7 @@ public class DMoD extends Robot
 
 			ahead(111);
 			turnRadarRight(target);
+			execute();
 		}
 	}
 
@@ -36,6 +38,7 @@ public class DMoD extends Robot
 	{
 		double bearing = e.getBearing();
 		double distance = e.getDistance();
+		radarControl();
 		if(getEnergy() < 20)
 		{
 			turnRight(bearing);
@@ -46,7 +49,11 @@ public class DMoD extends Robot
 			shoot(bearing, distance);
 		}
 	}
-
+	public void radarControl()
+	{
+		scanDirection *= -1;
+		setTurnRadarRight(360 * scanDirection);
+	}
 
 	public void shoot(double bearing, double distance)
 	{
