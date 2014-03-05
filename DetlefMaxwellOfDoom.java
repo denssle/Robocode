@@ -12,7 +12,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 	int round;
 	byte moveDirection = 1;
 	byte scanDirection = 2;
-		
+	
 	public void run() 
 	{
 		/**setBodyColor(Color.green);
@@ -29,6 +29,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		while(true)
 		{
 			turnRadarRight(360);
+			setAhead(4500* moveDirection);
 			execute();
 		}
 	}
@@ -49,7 +50,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		//out.println(heading);
 		//out.println(bearing);
 		setTurnRight(bearing);
-		setAhead(400 * moveDirection);
+		setAhead(4500* moveDirection);
 	}
 	
 	public void radarControl()
@@ -105,7 +106,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 	{
 		double bearing = e.getBearing();
 		fireControl(bearing, 15);
-		back(10 * moveDirection);
+		//back(20 * moveDirection);
 		setTurnRadarRight(360);
 		fireControl(bearing, 15);
 	}
@@ -135,6 +136,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		Color[] colours = {Color.green, Color.black, Color.blue, Color.cyan, 
 							Color.darkGray, Color.gray, Color.magenta,
 							 Color.orange, Color.pink, Color.red, Color.white, Color.yellow}; 
+		
 		setColors(colours[(int) (Math.random() * colours.length)],
                   colours[(int) (Math.random() * colours.length)],
                   colours[(int) (Math.random() * colours.length)],
