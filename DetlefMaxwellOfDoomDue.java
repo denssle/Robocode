@@ -9,8 +9,8 @@ import java.awt.Color;
 public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 {
 	int round;
-	byte moveDirection;
-	byte scanDirection;
+	byte moveDir;
+	byte scanDir;
 	
 	
 	public void run() 
@@ -26,17 +26,23 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 		setAdjustRadarForRobotTurn(true);
 		//setAdjustGunForRobotTurn(true);
 		
-moveDirection = 1;
-		scanDirection = 2;
+		moveDir = 1;
+		scanDir = 1;
 		round = 0;
 		// Robot main loop
 		
 		while(true)
 		{
-			turnRadarLeft(360);
 			borderControl();
-			setAhead(500* moveDirection);
+			
+			if (getRadarTurnRemaining() == 0)
+			{
+            	setTurnRadarRight(360 * scanDir);
+       		}
+			
+			setAhead(5000 * moveDir); 
 			execute();
+			message("Round: " + round++);
 		}
 	}
 
@@ -45,41 +51,33 @@ moveDirection = 1;
 		changeColor();
 		double bearing = e.getBearing();
 		double distance = e.getDistance();
-		double heading = e.getHeading();		
-		
-		radarControl();
-		
+		double heading = e.getHeading();		//Wozu?!
+
 		if(distance < 320)
 		{
 			fireControl(bearing, distance);
 		}
-
-		goBroadside(bearing);
+		
+		radarControl(bearing);
+		scanDir *= -1;
+		
+		goBroadside(bearing, distance);
 	}
-	public void goBroadside(double bearing)
+	
+	public void goBroadside(double bearing, double distance)
 	{
-		setTurnRight(bearing + 130);
-		setAhead(500* moveDirection);
+		setTurnRight(bearing + 70);
 	}
 	public void borderControl()
 	{
 		double min = 80;
 		double maxX = getBattleFieldWidth() - min;
 		double maxY = getBattleFieldHeight() - min;
-		if((getX() <= min || getY() <= min) ||(getX() >= maxX || getX() >= maxY))
+		if((getX() <= min || getY() <= min) ||(getX() >= maxX || getY() >= maxY))
 		{
-			moveDirection *= -1;
+			moveDir *= -1;
+			ahead(60*moveDir);
 		}
-		if (getVelocity() == 0)
-		{
-			moveDirection *= -1;
-			setAhead(700 * moveDirection);
-		}
-	}
-	public void radarControl()
-	{
-		scanDirection *= -1;
-		setTurnRadarRight(360 * scanDirection);
 	}
 	
 	public void fireControl(double bearing, double distance)
@@ -94,7 +92,6 @@ moveDirection = 1;
 			turnGunRight(x);
 			openFire(distance);
 		}
-		radarControl();
 	}
 	
 	public void openFire(double distance){
@@ -114,30 +111,38 @@ moveDirection = 1;
 			fire(Rules.MAX_BULLET_POWER);
 		}
 	}
-	
+	public void radarControl(double bearing)
+	{
+		double heading = getHeading();
+		double radarheading = getRadarHeading();		
+		double x = heading + bearing + (radarheading * -1);
+
+		setTurnRadarRight(x);
+	}
 	public void onHitByBullet(HitByBulletEvent e)
 	{
-		fuckYou(e.getName());
 		double bearing = e.getBearing();
-		fireControl(bearing, 251);
+		fireControl(bearing, 300);
+		fuckYou(e.getName());
 	}
-	
+	/*
 	public void onHitWall(HitWallEvent e) 
 	{
-		moveDirection *= -1;
+		moveDir *= -1;
 	}	
-	 
+	*/
 	public void onHitRobot(HitRobotEvent e)
 	{
 		double bearing = e.getBearing();
 		fireControl(bearing, 15);
-		//back(20 * moveDirection);
 	}
 	public void onWin(WinEvent e)
 	{
 		for (int i = 0; i < 50; i++)
 		{
-			setTurnRadarLeft(3600);
+			setTurnRadarLeft(3222);
+			setTurnGunRight(3689);
+			setTurnLeft(9222);
 			changeColor();
 			execute();
 		}
