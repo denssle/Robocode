@@ -28,7 +28,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		// Robot main loop
 		while(true)
 		{
-			radarControl();
+			turnRadarLeft(369);
 			setAhead(4500* moveDirection);
 			execute();
 		}
@@ -48,7 +48,7 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 			fireControl(bearing, distance);
 		}
 
-		setTurnRight(bearing + 120);
+		setTurnRight(bearing);
 		setAhead(4500* moveDirection);
 	}
 	

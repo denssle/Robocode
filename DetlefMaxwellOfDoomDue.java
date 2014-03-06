@@ -6,12 +6,12 @@ import java.awt.Color;
  * DetlefMaxwellOfDoom - a robot by Dominik
  */
 
-public class DetlefMaxwellOfDoom extends AdvancedRobot
+public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 {
-	double target; //zur zielverfolgung
 	int round;
-	byte moveDirection = 1;
-	byte scanDirection = 2;
+	byte moveDirection;
+	byte scanDirection;
+	
 	
 	public void run() 
 	{
@@ -21,15 +21,21 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		setBulletColor(Color.yellow);
 		setScanColor(Color.red);
 		*/
+		
 		setAdjustRadarForGunTurn(true);
 		setAdjustRadarForRobotTurn(true);
+		//setAdjustGunForRobotTurn(true);
 		
+moveDirection = 1;
+		scanDirection = 2;
 		round = 0;
 		// Robot main loop
+		
 		while(true)
 		{
-			radarControl();
-			setAhead(4500* moveDirection);
+			turnRadarLeft(360);
+			borderControl();
+			setAhead(500* moveDirection);
 			execute();
 		}
 	}
@@ -48,10 +54,28 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 			fireControl(bearing, distance);
 		}
 
-		setTurnRight(bearing + 110);
-		setAhead(4500* moveDirection);
+		goBroadside(bearing);
 	}
-	
+	public void goBroadside(double bearing)
+	{
+		setTurnRight(bearing + 130);
+		setAhead(500* moveDirection);
+	}
+	public void borderControl()
+	{
+		double min = 80;
+		double maxX = getBattleFieldWidth() - min;
+		double maxY = getBattleFieldHeight() - min;
+		if((getX() <= min || getY() <= min) ||(getX() >= maxX || getX() >= maxY))
+		{
+			moveDirection *= -1;
+		}
+		if (getVelocity() == 0)
+		{
+			moveDirection *= -1;
+			setAhead(700 * moveDirection);
+		}
+	}
 	public void radarControl()
 	{
 		scanDirection *= -1;
@@ -70,12 +94,13 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 			turnGunRight(x);
 			openFire(distance);
 		}
+		radarControl();
 	}
 	
 	public void openFire(double distance){
 		//message("Enemy under fire!");
 		short max = 250;
-		byte min = 35;
+		byte min = 45;
 		if(distance > max)
 		{
 			fire(1.5);
@@ -101,15 +126,12 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 	{
 		moveDirection *= -1;
 	}	
-	
+	 
 	public void onHitRobot(HitRobotEvent e)
 	{
 		double bearing = e.getBearing();
 		fireControl(bearing, 15);
 		//back(20 * moveDirection);
-		setTurnRadarRight(360);
-		fireControl(bearing, 15);
-		setTurnRight(bearing);
 	}
 	public void onWin(WinEvent e)
 	{
@@ -135,7 +157,6 @@ public class DetlefMaxwellOfDoom extends AdvancedRobot
 		int rand = (int) (Math.random() * fuckyou.length);
 		message(fuckyou[rand]+name+"!!!");
 	}
-	
 	public void message(String content)
 	{
 		out.println(getName()+": "+content);
