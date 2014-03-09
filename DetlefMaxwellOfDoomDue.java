@@ -12,10 +12,13 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 	byte moveDir;
 	byte scanDir;
 	
+	double min;
+	boolean borderCheck;
 	
 	public void run() 
 	{
-		/**setBodyColor(Color.green);
+		/*
+		setBodyColor(Color.green);
 		setGunColor(Color.black);
 		setRadarColor(Color.green);
 		setBulletColor(Color.yellow);
@@ -26,23 +29,19 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 		setAdjustRadarForRobotTurn(true);
 		//setAdjustGunForRobotTurn(true);
 		
+		min = 40;
 		moveDir = 1;
 		scanDir = 1;
 		round = 0;
 		// Robot main loop
-		
 		while(true)
 		{
 			borderControl();
+            setTurnRadarRight(360 * scanDir);
 			
-			if (getRadarTurnRemaining() == 0)
-			{
-            	setTurnRadarRight(360 * scanDir);
-       		}
-			
-			setAhead(5000 * moveDir); 
+			setAhead(120 * moveDir); 
 			execute();
-			message("Round: " + round++);
+			//message("Round: " + round++);
 		}
 	}
 
@@ -53,12 +52,11 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 		double distance = e.getDistance();
 		double heading = e.getHeading();		//Wozu?!
 
-		if(distance < 320)
+		if(distance < 400)
 		{
 			fireControl(bearing, distance);
 		}
 		
-		radarControl(bearing);
 		scanDir *= -1;
 		
 		goBroadside(bearing, distance);
@@ -66,17 +64,37 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 	
 	public void goBroadside(double bearing, double distance)
 	{
-		setTurnRight(bearing + 70);
+		if(borderCheck == true)
+		{
+			setTurnRight(bearing + 40);
+		}
+		else
+		{
+			setTurnRight(bearing);
+		}
 	}
 	public void borderControl()
 	{
-		double min = 80;
-		double maxX = getBattleFieldWidth() - min;
 		double maxY = getBattleFieldHeight() - min;
+		double maxX = getBattleFieldWidth() - min;
+		//message("X: "+getX()+"Y: " + getY());
 		if((getX() <= min || getY() <= min) ||(getX() >= maxX || getY() >= maxY))
 		{
-			moveDir *= -1;
-			ahead(60*moveDir);
+			/*
+			double a = getX();
+			double b = getBattleFieldHeight() / 2;
+			double hypo = Math.sqrt(a*a+b*b);
+			double g = Math.sin(a/hypo);
+			
+
+			setTurnRight(g);
+			setAhead(200 * moveDir);
+			*/
+			borderCheck = false;
+		}
+		else
+		{
+			borderCheck = true;
 		}
 	}
 	
@@ -87,7 +105,7 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 		
 		double x = heading + bearing + (gunheading * -1);
 		
-		if(getGunHeat() == 0 && getEnergy() > 5)
+		if(getGunHeat() == 0 && getEnergy() > 3)
 		{
 			turnGunRight(x);
 			openFire(distance);
@@ -97,7 +115,7 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 	public void openFire(double distance){
 		//message("Enemy under fire!");
 		short max = 250;
-		byte min = 45;
+		byte min = 20;
 		if(distance > max)
 		{
 			fire(1.5);
@@ -111,26 +129,19 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 			fire(Rules.MAX_BULLET_POWER);
 		}
 	}
-	public void radarControl(double bearing)
-	{
-		double heading = getHeading();
-		double radarheading = getRadarHeading();		
-		double x = heading + bearing + (radarheading * -1);
-
-		setTurnRadarRight(x);
-	}
+	
 	public void onHitByBullet(HitByBulletEvent e)
 	{
 		double bearing = e.getBearing();
 		fireControl(bearing, 300);
 		fuckYou(e.getName());
 	}
-	/*
+
 	public void onHitWall(HitWallEvent e) 
 	{
 		moveDir *= -1;
 	}	
-	*/
+
 	public void onHitRobot(HitRobotEvent e)
 	{
 		double bearing = e.getBearing();
