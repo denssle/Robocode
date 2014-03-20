@@ -25,11 +25,11 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 		setScanColor(Color.red);
 		*/
 		
-		setAdjustRadarForGunTurn(true);
-		setAdjustRadarForRobotTurn(true);
+		//setAdjustRadarForGunTurn(true);
+		//setAdjustRadarForRobotTurn(true);
 		//setAdjustGunForRobotTurn(true);
 		
-		min = 40;
+		min = 50;
 		moveDir = 1;
 		scanDir = 1;
 		round = 0;
@@ -39,7 +39,7 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 			borderControl();
             setTurnRadarRight(360 * scanDir);
 			
-			setAhead(120 * moveDir); 
+			setAhead(min * moveDir); 
 			execute();
 			//message("Round: " + round++);
 		}
@@ -58,7 +58,7 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 		}
 		
 		scanDir *= -1;
-		
+
 		goBroadside(bearing, distance);
 	}
 	
@@ -66,7 +66,7 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 	{
 		if(borderCheck == true)
 		{
-			setTurnRight(bearing + 40);
+			setTurnRight(bearing + min);
 		}
 		else
 		{
@@ -146,6 +146,12 @@ public class DetlefMaxwellOfDoomDue extends AdvancedRobot
 	{
 		double bearing = e.getBearing();
 		fireControl(bearing, 15);
+		
+		if(e.isMyFault()==false)
+		{
+			moveDir *= -1;
+			setTurnRight(bearing);
+		}
 	}
 	public void onWin(WinEvent e)
 	{
